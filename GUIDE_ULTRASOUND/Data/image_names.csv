@@ -1,0 +1,9 @@
+image_id,class_id,train_test
+,0,train
+,0,train
+,1,train
+,1,train
+,0,test
+,0,test
+,1,test
+,1,test

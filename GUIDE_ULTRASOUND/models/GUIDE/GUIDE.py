@@ -1,0 +1,29 @@
+"""
+Code is referenced from
+https://github.com/huawei-noah/Efficient-AI-Backbones/blob/master/vig_pytorch/pyramid_vig.py
+
+"""
+
+import torch.nn as nn
+import torch
+from GUIDE_ULTRASOUND.models.GUIDE.vigunet import ViGUNet
+from GUIDE_ULTRASOUND.models.GUIDE.vig import ViG_Gaze
+
+
+
+class GUIDE(nn.Module):
+    def __init__(self, num_classes):
+        super(GUIDE, self).__init__()
+        self.vig = ViG_Gaze(num_classes=num_classes)
+        self.vigunet = ViGUNet()
+        self.gaze = None
+
+    def forward(self, x):
+        _, gaze = self.vigunet(x)
+        self.gaze = gaze
+        pred = self.vig(torch.stack([x, gaze], dim=0))
+
+        return pred
+
+    def get_gaze(self):
+        return self.gaze
